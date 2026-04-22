@@ -1,3 +1,132 @@
+## 01. 
+#include <iostream>
+using namespace std;
+
+struct Mobile {
+    long mobileNo;
+    string name;
+    float bill;
+};
+
+int linearSearch(Mobile arr[], int n, long key) {
+    for(int i = 0; i < n; i++) {
+        if(arr[i].mobileNo == key)
+            return i;
+    }
+    return -1;
+}
+
+// Iterative Binary Search
+int binarySearchIter(Mobile arr[], int n, long key) {
+    int low = 0, high = n - 1;
+    while(low <= high) {
+        int mid = (low + high) / 2;
+        if(arr[mid].mobileNo == key)
+            return mid;
+        else if(arr[mid].mobileNo < key)
+            low = mid + 1;
+        else
+            high = mid - 1;
+    }
+    return -1;
+}
+
+// Recursive Binary Search
+int binarySearchRec(Mobile arr[], int low, int high, long key) {
+    if(low > high) return -1;
+    int mid = (low + high) / 2;
+
+    if(arr[mid].mobileNo == key)
+        return mid;
+    else if(arr[mid].mobileNo < key)
+        return binarySearchRec(arr, mid + 1, high, key);
+    else
+        return binarySearchRec(arr, low, mid - 1, key);
+}
+
+int main() {
+    int n;
+    cout << "Enter number of records: ";
+    cin >> n;
+
+    Mobile arr[50];
+
+    for(int i = 0; i < n; i++) {
+        cout << "Enter MobileNo Name Bill: ";
+        cin >> arr[i].mobileNo >> arr[i].name >> arr[i].bill;
+    }
+
+    long key;
+    cout << "Enter mobile number to search: ";
+    cin >> key;
+
+    int pos = linearSearch(arr, n, key);
+    if(pos != -1)
+        cout << "Found (Linear) at index " << pos << endl;
+    else
+        cout << "Not Found (Linear)" << endl;
+
+    pos = binarySearchIter(arr, n, key);
+    if(pos != -1)
+        cout << "Found (Binary Iterative) at index " << pos << endl;
+
+    pos = binarySearchRec(arr, 0, n-1, key);
+    if(pos != -1)
+        cout << "Found (Binary Recursive) at index " << pos << endl;
+
+    return 0;
+}
+
+## 02. 
+#include <iostream>
+using namespace std;
+
+struct Mobile {
+    long mobileNo;
+    string name;
+    float bill;
+};
+
+int partition(Mobile arr[], int low, int high) {
+    long pivot = arr[low].mobileNo;
+    int i = low + 1, j = high;
+
+    while(i <= j) {
+        while(arr[i].mobileNo <= pivot && i <= high) i++;
+        while(arr[j].mobileNo > pivot) j--;
+
+        if(i < j)
+            swap(arr[i], arr[j]);
+    }
+    swap(arr[low], arr[j]);
+    return j;
+}
+
+void quickSort(Mobile arr[], int low, int high) {
+    if(low < high) {
+        int p = partition(arr, low, high);
+        quickSort(arr, low, p - 1);
+        quickSort(arr, p + 1, high);
+    }
+}
+
+int main() {
+    int n;
+    cin >> n;
+    Mobile arr[50];
+
+    for(int i = 0; i < n; i++)
+        cin >> arr[i].mobileNo >> arr[i].name >> arr[i].bill;
+
+    quickSort(arr, 0, n-1);
+
+    cout << "Sorted by MobileNo:\n";
+    for(int i = 0; i < n; i++)
+        cout << arr[i].mobileNo << " " << arr[i].name << endl;
+}
+
+
+
 
 ## 03 .PROBLEM STATEMENT:
 Consider a friend’s network on Facebook social web site. Model it as a graph to represent each
